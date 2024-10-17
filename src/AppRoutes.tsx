@@ -4,6 +4,7 @@ import HomePage from "./pages/HomePage";
 import AuthCallbackPage from "./pages/AuthCallbackPage";
 import UserProfilePage from "./pages/UserProfilePage";
 import ProtectedRoute from "./auth/ProtectedRoute";
+import EmailVerificationError from "./pages/EmailVerificationError";
 
 const AppRoutes = () => {
   return (
@@ -27,6 +28,7 @@ const AppRoutes = () => {
           }
         />
       </Route>
+      <Route path="/email-verification-error" element={<EmailVerificationError />} />
       <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   )
