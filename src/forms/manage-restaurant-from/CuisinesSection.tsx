@@ -14,9 +14,9 @@ const CuisinesSection = () => {
   return (
     <div className="space-y-2">
       <div>
-        <h2 className="text-2xl font-bold">Cuisines</h2>
+        <h2 className="text-2xl font-bold">Món ăn</h2>
         <FormDescription>
-          Select the cuisines that your restaurant serves
+          Chọn món ăn của nhà hàng
         </FormDescription>
       </div>
       <FormField

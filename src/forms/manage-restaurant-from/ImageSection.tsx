@@ -17,10 +17,9 @@ const ImageSection = () => {
   return (
     <div className="space-y-2">
       <div>
-        <h2 className="text-2xl font-bold">Image</h2>
+        <h2 className="text-2xl font-bold">Hình ảnh</h2>
         <FormDescription>
-          Add an image that will be displayed on your restaurant listing in the
-          search results. Adding a new image will overwrite the existing one.
+          Hình ảnh cho nhà hàng sẽ hiển thị trên mục tìm kiếm
         </FormDescription>
       </div>
 

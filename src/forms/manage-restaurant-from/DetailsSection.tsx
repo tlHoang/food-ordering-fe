@@ -14,9 +14,9 @@ const DetailsSection = () => {
   return (
     <div className="space-y-2">
       <div>
-        <h2 className="text-2xl font-bold">Details</h2>
+        <h2 className="text-2xl font-bold">Chi tiết</h2>
         <FormDescription>
-          Enter the details about your restaurant
+          Cập nhập thông tin nhà hàng của bạn
         </FormDescription>
       </div>
       <FormField
@@ -24,7 +24,7 @@ const DetailsSection = () => {
         name="restaurantName"
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Name</FormLabel>
+            <FormLabel>Tên</FormLabel>
             <FormControl>
               <Input {...field} className="bg-white" />
             </FormControl>
@@ -38,7 +38,7 @@ const DetailsSection = () => {
           name="city"
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel>City</FormLabel>
+              <FormLabel>Thành phố</FormLabel>
               <FormControl>
                 <Input {...field} className="bg-white" />
               </FormControl>
@@ -51,7 +51,7 @@ const DetailsSection = () => {
           name="country"
           render={({ field }) => (
             <FormItem className="flex-1">
-              <FormLabel>Country</FormLabel>
+              <FormLabel>Quốc gia</FormLabel>
               <FormControl>
                 <Input {...field} className="bg-white" />
               </FormControl>
@@ -66,9 +66,9 @@ const DetailsSection = () => {
         name="deliveryPrice"
         render={({ field }) => (
           <FormItem className="max-w-[25%]">
-            <FormLabel>Delivery price (£)</FormLabel>
+            <FormLabel>Giá vận chuyển (VND)</FormLabel>
             <FormControl>
-              <Input {...field} className="bg-white" placeholder="1.50" />
+              <Input {...field} className="bg-white" placeholder="150000" />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -79,7 +79,7 @@ const DetailsSection = () => {
         name="estimatedDeliveryTime"
         render={({ field }) => (
           <FormItem className="max-w-[25%]">
-            <FormLabel>Estimated Delivery Time (minutes)</FormLabel>
+            <FormLabel>Ước tính thời gian vận chuyển (phút)</FormLabel>
             <FormControl>
               <Input {...field} className="bg-white" placeholder="30" />
             </FormControl>
