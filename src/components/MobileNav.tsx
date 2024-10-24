@@ -14,7 +14,7 @@ const MobileNav = () => {
       </SheetTrigger>
       <SheetContent className="space-y-3">
         <SheetTitle>
-          { isAuthenticated ? (
+          {isAuthenticated ? (
             <span className="flex items-center font-bold gap-2">
               <CircleUserRound className="text-orange-500" />
               {user?.name}
@@ -25,10 +25,10 @@ const MobileNav = () => {
         </SheetTitle>
         <Separator />
         <SheetDescription className="flex flex-col gap-4">
-          { isAuthenticated ? (
+          {isAuthenticated ? (
             <MobileNavLinks />
           ) : (
-            <Button onClick={() => loginWithRedirect()} className="flex-1 font-bold bg-orange-500">Log In</Button>
+            <Button onClick={() => loginWithRedirect()} className="flex-1 font-bold bg-orange-500">Đăng nhập</Button>
           )}
         </SheetDescription>
       </SheetContent>

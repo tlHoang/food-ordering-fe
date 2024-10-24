@@ -6,7 +6,7 @@ const Footer = () => {
           LOGO
         </span>
         <span className="text-white font-bold tracking-tight flex gap-4">
-          <span>Copyright © 2022. All rights reserved</span>
+          <span>Copyright © 2024. All rights reserved</span>
           <span>Privacy Policy</span>
           <span>Terms & Conditions</span>
         </span>
