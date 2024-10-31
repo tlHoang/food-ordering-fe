@@ -78,10 +78,10 @@ const SearchBar = ({ onSubmit, onReset, placeHolder, searchQuery }: Props) => {
           variant="outline"
           className="rounded-full"
         >
-          Reset
+          Xoá
         </Button>
         <Button type="submit" className="rounded-full bg-orange-500">
-          Search
+          Tìm kiếm
         </Button>
       </form>
     </Form>

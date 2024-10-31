@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useFormContext } from "react-hook-form";
+import { toast } from "sonner";
 
 const ImageSection = () => {
   const { control, watch } = useFormContext();
@@ -42,10 +43,27 @@ const ImageSection = () => {
                   className="bg-white"
                   type="file"
                   accept=".jpg, .jpeg, .png"
-                  onChange={(event) =>
-                    field.onChange(
-                      event.target.files ? event.target.files[0] : null
-                    )
+                  onChange={(event) => {
+                    const file = event.target.files ? event.target.files[0] : null;
+                    if (file) {
+                      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+                      if (!allowedTypes.includes(file.type)) {
+                        toast.error("Chỉ chấp nhận file ảnh định dạng jpg, jpeg, png");
+                        event.target.value = '';
+                        return;
+                      }
+                      if (file.size > 5 * 1024 * 1024) {
+                        toast.error("Ảnh phải nhỏ hơn 5MB");
+                        event.target.value = '';
+                        return;
+                      }
+                      field.onChange(file);
+                    }
+                  }
+
+                    // field.onChange(
+                    //   event.target.files ? event.target.files[0] : null
+                    // )
                   }
                 />
               </FormControl>
