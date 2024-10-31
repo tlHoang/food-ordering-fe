@@ -66,11 +66,11 @@ export const useCreateMyRestaurant = () => {
   } = useMutation(createMyRestaurantRequest);
 
   if (isSuccess) {
-    toast.success("Restaurant created!");
+    toast.success("Tạo thành công");
   }
 
   if (error) {
-    toast.error("Unable to update restaurant");
+    toast.error("Cập nhật thất bại");
   }
 
   return { createRestaurant, isLoading };
@@ -107,11 +107,11 @@ export const useUpdateMyRestaurant = () => {
   } = useMutation(updateRestaurantRequest);
 
   if (isSuccess) {
-    toast.success("Restaurant Updated");
+    toast.success("Đã cập nhật");
   }
 
   if (error) {
-    toast.error("Unable to update restaurant");
+    toast.error("Cập nhật thất bại");
   }
 
   return { updateRestaurant, isLoading };
