@@ -110,7 +110,7 @@ export const useUpdateMyUser = () => {
   } = useMutation(updateMyUserRequest);
 
   if (isSuccess) {
-    toast.success("User profile updated!");
+    toast.success("Cập nhật thành công");
   }
 
   if (error) {

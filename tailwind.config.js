@@ -8,14 +8,6 @@ export default {
 		'./src/**/*.{ts,tsx}',
 	],
   theme: {
-		colors: {
-			'orange': {
-				500: '#EC8677',
-			},
-			'gray': {
-				200: '#F3F4F6',
-			}
-		},
   	extend: {
   		borderRadius: {
   			lg: 'var(--radius)',
@@ -23,6 +15,12 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+				'orange': {
+					500: '#EC8677',
+				},
+				'gray': {
+					200: '#F3F4F6',
+				},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
