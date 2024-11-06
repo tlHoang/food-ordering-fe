@@ -19,7 +19,10 @@ export type CartItem = {
 export default function DetailPage() {
   const { restaurantId } = useParams();
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>(() => {
+    const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
+    return storedCartItems ? JSON.parse(storedCartItems) : [];
+  });
 
   const addToCart = (menuItem: MenuItemType) => {
     setCartItems((prevCartItems) => {
@@ -46,6 +49,11 @@ export default function DetailPage() {
           },
         ];
       }
+
+      sessionStorage.setItem(
+        `cartItems-${restaurantId}`,
+        JSON.stringify(updatedCartItems)
+      );
 
       sessionStorage.setItem(
         `cartItems-${restaurantId}`,
@@ -98,7 +106,7 @@ export default function DetailPage() {
           <Card>
             <OrderSummary restaurant={restaurant} cartItems={cartItems} removeFromCart={removeFromCart} />
             <CardFooter>
-              <CheckoutButton />
+              <CheckoutButton disabled={cartItems.length === 0} onCheckout={() => { }} />
             </CardFooter>
           </Card>
         </div>

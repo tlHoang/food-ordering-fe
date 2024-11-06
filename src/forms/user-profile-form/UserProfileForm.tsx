@@ -30,16 +30,16 @@ type Props = {
   currentUser: User;
   onSave: (userProfileData: UserFormData) => void;
   isLoading: boolean;
-  // title?: string;
-  // buttonText?: string;
+  title?: string;
+  buttonText?: string;
 };
 
 const UserProfileForm = ({
   onSave,
   isLoading,
   currentUser,
-  // title = "User Profile",
-  // buttonText = "Submit",
+  title = "Thông tin cá nhân",
+  buttonText = "Cập nhật",
 }: Props) => {
   const form = useForm<UserFormData>({
     resolver: zodResolver(formSchema),
@@ -57,8 +57,8 @@ const UserProfileForm = ({
         className="space-y-4 bg-gray-50 rounded-lg md:p-10"
       >
         <div>
-          {/* <h2 className="text-2xl font-bold">{title}</h2> */}
-          <h2 className="text-2xl font-bold">Thông tin cá nhân</h2>
+          <h2 className="text-2xl font-bold">{title}</h2>
+          {/* <h2 className="text-2xl font-bold">Thông tin cá nhân</h2> */}
           <FormDescription>Xem và chỉnh sửa thông tin cá nhân của bạn ở đây</FormDescription>
         </div>
 
@@ -137,8 +137,8 @@ const UserProfileForm = ({
           <LoadingButton />
         ) : (
           <Button type="submit" className="bg-orange-500">
-            {/* {buttonText} */}
-            Cập nhật
+            {buttonText}
+            {/* Cập nhật */}
           </Button>
         )}
 
