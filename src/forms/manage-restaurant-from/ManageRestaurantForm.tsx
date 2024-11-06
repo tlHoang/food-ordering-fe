@@ -70,19 +70,14 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
       return;
     }
 
-    // price lowest domination of 100 = 100pence == 1GBP
-    const deliveryPriceFormatted = parseInt(
-      (restaurant.deliveryPrice / 100).toFixed(2)
-    );
-
     const menuItemsFormatted = restaurant.menuItems.map((item) => ({
       ...item,
-      price: parseInt((item.price / 100).toFixed(2)),
+      price: item.price, // No need to divide by 100
     }));
 
     const updatedRestaurant = {
       ...restaurant,
-      deliveryPrice: deliveryPriceFormatted,
+      deliveryPrice: restaurant.deliveryPrice, // No need to divide by 100
       menuItems: menuItemsFormatted,
     };
 
@@ -96,23 +91,14 @@ const ManageRestaurantForm = ({ onSave, isLoading, restaurant }: Props) => {
     formData.append("city", formDataJson.city);
     formData.append("country", formDataJson.country);
 
-    formData.append(
-      "deliveryPrice",
-      (formDataJson.deliveryPrice * 100).toString()
-    );
-    formData.append(
-      "estimatedDeliveryTime",
-      formDataJson.estimatedDeliveryTime.toString()
-    );
+    formData.append("deliveryPrice", formDataJson.deliveryPrice.toString());
+    formData.append("estimatedDeliveryTime", formDataJson.estimatedDeliveryTime.toString());
     formDataJson.cuisines.forEach((cuisine, index) => {
       formData.append(`cuisines[${index}]`, cuisine);
     });
     formDataJson.menuItems.forEach((menuItem, index) => {
       formData.append(`menuItems[${index}][name]`, menuItem.name);
-      formData.append(
-        `menuItems[${index}][price]`,
-        (menuItem.price * 100).toString()
-      );
+      formData.append(`menuItems[${index}][price]`, menuItem.price.toString());
     });
 
     if (formDataJson.imageFile) {
