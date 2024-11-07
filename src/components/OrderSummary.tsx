@@ -27,7 +27,7 @@ const OrderSummary = ({ restaurant, cartItems, removeFromCart }: Props) => {
     <>
       <CardHeader>
         <CardTitle className="text-2xl font-bold tracking-tight flex justify-between">
-          <span>Your Order</span>
+          <span>Đơn của bạn</span>
           <span>{getTotalCost()} ₫</span>
         </CardTitle>
       </CardHeader>
@@ -53,7 +53,7 @@ const OrderSummary = ({ restaurant, cartItems, removeFromCart }: Props) => {
         ))}
         <Separator />
         <div className="flex justify-between">
-          <span>Delivery</span>
+          <span>Cước phí</span>
           <span>{restaurant.deliveryPrice.toLocaleString()} ₫</span>
         </div>
         <Separator />
