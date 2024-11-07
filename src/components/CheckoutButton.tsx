@@ -2,17 +2,24 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useLocation } from "react-router-dom";
 import { Button } from "./ui/button";
 import LoadingButton from "./LoadingButton";
-import UserProfileForm, { UserFormData } from "@/forms/user-profile-form/UserProfileForm";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import UserProfileForm, {
+  UserFormData,
+} from "@/forms/user-profile-form/UserProfileForm";
 import { useGetMyUser } from "@/api/MyUserApi";
-import { Dialog, DialogTrigger, DialogContent } from "./ui/dialog";
 
 type Props = {
   onCheckout: (userFormData: UserFormData) => void;
   disabled: boolean;
+  isLoading: boolean;
 };
 
-const CheckoutButton = ({ onCheckout, disabled }: Props) => {
-  const { isAuthenticated, isLoading: isAuthLoading, loginWithRedirect } = useAuth0();
+const CheckoutButton = ({ onCheckout, disabled, isLoading }: Props) => {
+  const {
+    isAuthenticated,
+    isLoading: isAuthLoading,
+    loginWithRedirect,
+  } = useAuth0();
 
   const { pathname } = useLocation();
 
@@ -28,11 +35,13 @@ const CheckoutButton = ({ onCheckout, disabled }: Props) => {
 
   if (!isAuthenticated) {
     return (
-      <Button onClick={onLogin} className="bg-orange-500 flex-1">Log in to check out</Button>
+      <Button onClick={onLogin} className="bg-orange-500 flex-1">
+        Log in to check out
+      </Button>
     );
   }
 
-  if (isAuthLoading || !currentUser) {
+  if (isAuthLoading || !currentUser || isLoading) {
     return <LoadingButton />;
   }
 
@@ -48,12 +57,12 @@ const CheckoutButton = ({ onCheckout, disabled }: Props) => {
           currentUser={currentUser}
           onSave={onCheckout}
           isLoading={isGetUserLoading}
-          title="Confirm Delivery Details"
-          buttonText="Tiếp tục thanh toán"
+          title="Confirm Deliery Details"
+          buttonText="Continue to payment"
         />
       </DialogContent>
     </Dialog>
-  )
+  );
 };
 
-export default CheckoutButton
+export default CheckoutButton;

@@ -9,7 +9,7 @@ const UserProfilePage = () => {
   const { updateUser, isLoading: isUpdateLoading } = useUpdateMyUser();
 
   if (isGetLoading) {
-    return <span>Loading...</span>;
+    return <span></span>;
   }
 
   if (!currentUser) {
