@@ -13,21 +13,21 @@ type Props = {
 
 const OrderSummary = ({ restaurant, cartItems, removeFromCart }: Props) => {
   const getTotalCost = () => {
-    const totalInPence = cartItems.reduce(
+    const total = cartItems.reduce(
       (total, cartItem) => total + cartItem.price * cartItem.quantity,
       0
     );
 
-    const totalWithDelivery = totalInPence + restaurant.deliveryPrice;
+    const totalWithDelivery = total + restaurant.deliveryPrice;
 
-    return (totalWithDelivery / 100).toFixed(2);
+    return totalWithDelivery.toLocaleString();
   };
 
   return (
     <>
       <CardHeader>
         <CardTitle className="text-2xl font-bold tracking-tight flex justify-between">
-          <span>Your Order</span>
+          <span>Đơn của bạn</span>
           <span>{getTotalCost()} ₫</span>
         </CardTitle>
       </CardHeader>
@@ -47,14 +47,14 @@ const OrderSummary = ({ restaurant, cartItems, removeFromCart }: Props) => {
                 size={20}
                 onClick={() => removeFromCart(item)}
               />
-              {((item.price * item.quantity) / 100).toFixed(2)} ₫
+              {(item.price * item.quantity).toLocaleString()} ₫
             </span>
           </div>
         ))}
         <Separator />
         <div className="flex justify-between">
-          <span>Delivery</span>
-          <span>{(restaurant.deliveryPrice / 100).toFixed(2)} ₫</span>
+          <span>Cước phí</span>
+          <span>{restaurant.deliveryPrice.toLocaleString()} ₫</span>
         </div>
         <Separator />
       </CardContent>

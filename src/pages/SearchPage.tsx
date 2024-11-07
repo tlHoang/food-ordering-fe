@@ -72,7 +72,7 @@ const SearchPage = () => {
   }
 
   if (!results?.data || !city) {
-    return <span>No results found</span>;
+    return <span></span>;
   }
 
   return (
@@ -93,6 +93,7 @@ const SearchPage = () => {
           onSubmit={setSearchQuery}
           placeHolder="Tìm theo tên món ăn hoặc nhà hàng"
           onReset={resetSearch}
+          enableSuggestions={false}
         />
         <div className="flex justify-between flex-col gap-3 lg:flex-row">
           <SearchResultInfo total={results.pagination.total} city={city} />

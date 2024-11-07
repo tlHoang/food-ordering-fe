@@ -5,7 +5,7 @@ import { Form, FormControl, FormField, FormItem } from "./ui/form";
 import { Search } from "lucide-react";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const formSchema = z.object({
   searchQuery: z.string({
@@ -20,9 +20,11 @@ type Props = {
   placeHolder: string;
   onReset?: () => void;
   searchQuery?: string;
+  enableSuggestions?: boolean; // New prop
 };
 
-const SearchBar = ({ onSubmit, onReset, placeHolder, searchQuery }: Props) => {
+const SearchBar = ({ onSubmit, onReset, placeHolder, searchQuery, enableSuggestions = false }: Props) => {
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const form = useForm<SearchForm>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,6 +36,18 @@ const SearchBar = ({ onSubmit, onReset, placeHolder, searchQuery }: Props) => {
     form.reset({ searchQuery });
   }, [form, searchQuery]);
 
+  useEffect(() => {
+    if (enableSuggestions && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const { latitude, longitude } = position.coords;
+        const response = await fetch(`https://geocode.xyz/${latitude},${longitude}?geoit=json&auth=925299739953692628928x65897`);
+        const data = await response.json();
+        console.log(data);
+        setSuggestions([data.alt.loc[0].prov]);
+      });
+    }
+  }, [enableSuggestions]);
+
   const handleReset = () => {
     form.reset({
       searchQuery: "",
@@ -42,6 +56,11 @@ const SearchBar = ({ onSubmit, onReset, placeHolder, searchQuery }: Props) => {
     if (onReset) {
       onReset();
     }
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    form.setValue("searchQuery", suggestion);
+    setSuggestions([]);
   };
 
   return (
@@ -62,11 +81,27 @@ const SearchBar = ({ onSubmit, onReset, placeHolder, searchQuery }: Props) => {
           render={({ field }) => (
             <FormItem className="flex-1">
               <FormControl>
-                <Input
-                  {...field}
-                  className="border-none shadow-none text-xl focus-visible:ring-0"
-                  placeholder={placeHolder}
-                />
+                <div className="relative">
+                  <Input
+                    {...field}
+                    className="border-none shadow-none text-xl focus-visible:ring-0"
+                    placeholder={placeHolder}
+                    autoComplete="off"
+                  />
+                  {enableSuggestions && suggestions.length > 0 && (
+                    <ul className="absolute bg-white border border-gray-300 rounded-md mt-1 w-auto max-w-full z-10">
+                      {suggestions.map((suggestion, index) => (
+                        <li
+                          key={index}
+                          className="p-2 cursor-pointer hover:bg-gray-200"
+                          onClick={() => handleSuggestionClick(suggestion)}
+                        >
+                          {suggestion}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
               </FormControl>
             </FormItem>
           )}
