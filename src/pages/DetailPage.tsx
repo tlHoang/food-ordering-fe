@@ -105,7 +105,7 @@ const DetailPage = () => {
   };
 
   if (isLoading || !restaurant) {
-    return "Loading...";
+    return "";
   }
 
   return (

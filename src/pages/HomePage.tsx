@@ -17,7 +17,7 @@ const HomePage = () => {
           Đặt món ăn ngay!
         </h1>
         <span className="text-xl">Uy tín, nhanh chóng</span>
-        <SearchBar placeHolder="Tìm kiếm Thành phố, ..." onSubmit={handleSearchSubmit} />
+        <SearchBar placeHolder="Tìm kiếm Thành phố, ..." onSubmit={handleSearchSubmit} enableSuggestions={true} />
       </div>
       <div className="grid md:grid-cols-2 gap-5">
         <img src={landingImage} />
