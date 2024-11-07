@@ -1,3 +1,4 @@
+import { useCreateCheckoutSession } from "@/api/OrderApi";
 import { useGetRestaurant } from "@/api/RestaurantApi";
 import CheckoutButton from "@/components/CheckoutButton";
 import MenuItem from "@/components/MenuItem";
@@ -8,6 +9,7 @@ import { Card, CardFooter } from "@/components/ui/card";
 import { MenuItem as MenuItemType } from "@/types";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
+import { UserFormData } from "@/forms/user-profile-form/UserProfileForm";
 
 export type CartItem = {
   _id: string;
@@ -20,6 +22,7 @@ export default function DetailPage() {
   const { restaurantId } = useParams();
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const { createCheckoutSession, isLoading: isCheckoutLoading}  = useCreateCheckoutSession();
 
   const addToCart = (menuItem: MenuItemType) => {
     setCartItems((prevCartItems) => {
@@ -55,6 +58,36 @@ export default function DetailPage() {
       return updatedCartItems;
     });
   }
+
+  const onCheckout = async (userFormData: UserFormData) => {
+    if (!restaurant) {
+      return;
+    }
+
+    const checkoutData = {
+      cartItems: cartItems.map((cartItem) => ({
+        menuItemId: cartItem._id,
+        name: cartItem.name,
+        quantity: cartItem.quantity.toString(),
+      })),
+      restaurantId: restaurant._id,
+      deliveryDetails: {
+        name: userFormData.name,
+        addressLine1: userFormData.addressLine1,
+        city: userFormData.city,
+        country: userFormData.country,
+        email: userFormData.email as string,
+      },
+    };
+
+    const data = await createCheckoutSession(checkoutData);
+    window.location.href = data.url;
+  };
+
+  if (isLoading || !restaurant) {
+    return "Loading...";
+  }
+
 
   const removeFromCart = (cartItem: CartItem) => {
     setCartItems((prevCartItems) => {
@@ -98,7 +131,11 @@ export default function DetailPage() {
           <Card>
             <OrderSummary restaurant={restaurant} cartItems={cartItems} removeFromCart={removeFromCart} />
             <CardFooter>
-              <CheckoutButton />
+              <CheckoutButton
+                disabled={cartItems.length === 0}
+                onCheckout={onCheckout}
+                isLoading={isCheckoutLoading}
+              />
             </CardFooter>
           </Card>
         </div>
