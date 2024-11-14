@@ -50,19 +50,19 @@ const OrderItemCard = ({ order }: Props) => {
       <CardHeader>
         <CardTitle className="grid md:grid-cols-4 gap-4 justify-between mb-3">
           <div>
-            Customer Name:
+            Tên khách hàng:
             <span className="ml-2 font-normal">
               {order.deliveryDetails.name}
             </span>
           </div>
           <div>
-            Delivery address:
+            Địa chỉ cần giao:
             <span className="ml-2 font-normal">
               {order.deliveryDetails.addressLine1}, {order.deliveryDetails.city}
             </span>
           </div>
           <div>
-            Time:
+            Thời gian:
             <span className="ml-2 font-normal">{getTime()}</span>
           </div>
           <div>
@@ -86,7 +86,7 @@ const OrderItemCard = ({ order }: Props) => {
           ))}
         </div>
         <div className="flex flex-col space-y-1.5">
-          <Label htmlFor="status">What is the status of this order?</Label>
+          <Label htmlFor="status">Trạng thái đơn hàng:</Label>
           <Select
             value={status}
             disabled={isLoading}
