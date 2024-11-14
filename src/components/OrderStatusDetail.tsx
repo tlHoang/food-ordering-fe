@@ -9,14 +9,14 @@ const OrderStatusDetail = ({ order }: Props) => {
   return (
     <div className="space-y-5">
       <div className="flex flex-col">
-        <span className="font-bold">Delivering to:</span>
+        <span className="font-bold">Giao đến:</span>
         <span>{order.deliveryDetails.name}</span>
         <span>
           {order.deliveryDetails.addressLine1}, {order.deliveryDetails.city}
         </span>
       </div>
       <div className="flex flex-col">
-        <span className="font-bold">Your Order</span>
+        <span className="font-bold">Chi tiết đơn:</span>
         <ul>
           {order.cartItems.map((item) => (
             <li>
@@ -27,8 +27,8 @@ const OrderStatusDetail = ({ order }: Props) => {
       </div>
       <Separator />
       <div className="flex flex-col">
-        <span className="font-bold">Total</span>
-        <span>£{(order.totalAmount / 100).toFixed(2)}</span>
+        <span className="font-bold">Tổng</span>
+        <span>{order.totalAmount.toLocaleString()} ₫</span>
       </div>
     </div>
   );

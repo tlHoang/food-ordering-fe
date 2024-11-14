@@ -66,7 +66,7 @@ const OrderItemCard = ({ order }: Props) => {
             <span className="ml-2 font-normal">{getTime()}</span>
           </div>
           <div>
-            Total Cost:
+            Tổng:
             <span className="ml-2 font-normal">
               {order.totalAmount.toLocaleString()} ₫
             </span>
