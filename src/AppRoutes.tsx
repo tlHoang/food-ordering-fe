@@ -8,7 +8,6 @@ import EmailVerificationError from "./pages/EmailVerificationError";
 import ManageRestaurantPage from "./pages/ManageRestaurantPage";
 import SearchPage from "./pages/SearchPage";
 import DetailPage from "./pages/DetailPage";
-import OrderStatusPage from "./pages/OrderStatusPage";
 
 const AppRoutes = () => {
   return (
@@ -40,10 +39,10 @@ const AppRoutes = () => {
       />
       <Route element={<ProtectedRoute />}>
         <Route
-          path="/order-status"
+          path="/user-profile"
           element={
             <Layout>
-              <OrderStatusPage />
+              <UserProfilePage />
             </Layout>
           }
         />
