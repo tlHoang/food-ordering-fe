@@ -11,6 +11,8 @@ import CheckoutButton from "@/components/CheckoutButton";
 import { UserFormData } from "@/forms/user-profile-form/UserProfileForm";
 import { useCreateCheckoutSession } from "@/api/OrderApi";
 import Review from "@/components/Review";
+import { useGetReviews } from "@/api/ReviewApi";
+import { Star, StarHalf } from "lucide-react";
 
 export type CartItem = {
   _id: string;
@@ -24,6 +26,10 @@ const DetailPage = () => {
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
   const { createCheckoutSession, isLoading: isCheckoutLoading } =
     useCreateCheckoutSession();
+  const { data: reviews } = useGetReviews(restaurantId);
+  const averageRating = reviews?.length
+    ? (reviews.reduce((acc: any, review: any) => acc + review.rating, 0) / reviews.length).toFixed(1)
+    : "No ratings yet";
 
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
@@ -120,6 +126,27 @@ const DetailPage = () => {
       <div className="grid md:grid-cols-[4fr_2fr] gap-5 md:px-32">
         <div className="flex flex-col gap-4">
           <RestaurantInfo restaurant={restaurant} />
+          <div className="text-xl font-bold flex items-center gap-2">
+            Rating: {averageRating}
+            {reviews?.length > 0 && (
+              <div className="flex items-center">
+                {[...Array(5)].map((_, index) => {
+                  const ratingValue = index + 1;
+                  return (
+                    <span key={index}>
+                      {ratingValue <= Math.floor(Number(averageRating)) ? (
+                        <Star className="h-5 w-5 text-yellow-500" />
+                      ) : ratingValue - 0.5 <= Number(averageRating) ? (
+                        <StarHalf className="h-5 w-5 text-yellow-500" />
+                      ) : (
+                        <Star className="h-5 w-5 text-white" />
+                      )}
+                    </span>
+                  );
+                })}
+              </div>
+            )}
+          </div>
           <span className="text-2xl font-bold tracking-tight">Menu</span>
           {restaurant.menuItems.map((menuItem) => (
             <MenuItem
