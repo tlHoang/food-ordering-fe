@@ -70,30 +70,36 @@ const ManageRestaurantPage = () => {
 
   return (
     <div>
-      {activeTab !== "manage-restaurant" && <SearchBar onSearch={setSearchQuery} />}
       <Tabs defaultValue="orders" onValueChange={setActiveTab}>
-        <TabsList>
-          <TabsTrigger value="orders">Đơn hàng</TabsTrigger>
-          <TabsTrigger value="done-orders">Đơn hàng đã hoàn thành</TabsTrigger>
-          <TabsTrigger value="manage-restaurant">Nhà hàng</TabsTrigger>
-        </TabsList>
+        <div className="flex items-center justify-between">
+          <TabsList className="my-4">
+            <TabsTrigger value="orders">Đơn hàng</TabsTrigger>
+            <TabsTrigger value="done-orders">Đơn hàng đã hoàn thành</TabsTrigger>
+            <TabsTrigger value="manage-restaurant">Nhà hàng</TabsTrigger>
+          </TabsList>
+          {activeTab !== "manage-restaurant" && <SearchBar onSearch={setSearchQuery} />}
+        </div>
         <TabsContent
           value="orders"
           className="space-y-5 bg-gray-50 p-10 rounded-lg"
         >
           <h2 className="text-2xl font-bold">{orderTab?.length} đơn hàng</h2>
-          {orderTab?.map((order) => (
-            <OrderItemCard order={order} onStatusUpdate={handleStatusUpdate} />
-          ))}
+          <div className="grid md:grid-cols-3 gap-2">
+            {orderTab?.map((order) => (
+              <OrderItemCard order={order} onStatusUpdate={handleStatusUpdate} />
+            ))}
+          </div>
         </TabsContent>
         <TabsContent
           value="done-orders"
           className="space-y-5 bg-gray-50 p-10 rounded-lg"
         >
           <h2 className="text-2xl font-bold">{doneOrderTab?.length} đơn hàng đã hoàn thành</h2>
-          {doneOrderTab?.map((order) => (
-            <OrderItemCard order={order} onStatusUpdate={handleStatusUpdate} />
-          ))}
+          <div className="grid md:grid-cols-3 gap-2">
+            {doneOrderTab?.map((order) => (
+              <OrderItemCard order={order} onStatusUpdate={handleStatusUpdate} />
+            ))}
+          </div>
         </TabsContent>
         <TabsContent value="manage-restaurant">
           <ManageRestaurantForm

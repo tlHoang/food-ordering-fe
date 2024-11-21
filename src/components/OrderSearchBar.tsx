@@ -23,7 +23,7 @@ const SearchBar = ({ onSearch }: { onSearch: (query: string) => void }) => {
   };
 
   return (
-    <div className="flex justify-center my-4">
+    <div className="flex justify-center">
       <input
         type="text"
         placeholder="Tìm theo tên khách hàng"

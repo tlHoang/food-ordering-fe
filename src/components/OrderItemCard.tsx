@@ -50,7 +50,7 @@ const OrderItemCard = ({ order, onStatusUpdate }: Props) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="grid md:grid-cols-4 gap-4 justify-between mb-3">
+        <CardTitle className="grid gap-4 justify-between mb-3">
           <div>
             Tên khách hàng:
             <span className="ml-2 font-normal">
