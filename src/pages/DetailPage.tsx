@@ -123,9 +123,8 @@ const DetailPage = () => {
           className="rounded-md object-cover h-full w-full"
         />
       </AspectRatio>
-      <div className="grid md:grid-cols-[4fr_2fr] gap-5 md:px-32">
-        <div className="flex flex-col gap-4">
-          <RestaurantInfo restaurant={restaurant} />
+      <div className="grid md:grid-cols-[2fr_4fr_2fr] gap-5 md:px-32">
+        <div>
           <div className="text-xl font-bold flex items-center gap-2">
             Rating: {averageRating}
             {reviews?.length > 0 && (
@@ -147,6 +146,11 @@ const DetailPage = () => {
               </div>
             )}
           </div>
+          <Review />
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <RestaurantInfo restaurant={restaurant} />
           <span className="text-2xl font-bold tracking-tight">Menu</span>
           {restaurant.menuItems.map((menuItem) => (
             <MenuItem
@@ -154,7 +158,6 @@ const DetailPage = () => {
               addToCart={() => addToCart(menuItem)}
             />
           ))}
-          <Review />
         </div>
 
         <div>

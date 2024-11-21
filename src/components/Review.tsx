@@ -5,10 +5,12 @@ import Rating from './Rating';
 import { Button } from './ui/button';
 import { Textarea } from './ui/textarea';
 import { Review as ReviewType } from '@/types';
+import { useGetMyUser } from '@/api/MyUserApi';
 
 const Review: React.FC = () => {
   const { restaurantId } = useParams();
-  if (!restaurantId) {
+  const { currentUser } = useGetMyUser();
+  if (!restaurantId || !currentUser) {
     return null;
   }
   const { data: reviews, isLoading: isReviewsLoading } = useGetReviews(restaurantId);
@@ -19,6 +21,10 @@ const Review: React.FC = () => {
   const [comment, setComment] = useState('');
 
   const handleCreateReview = () => {
+    if (reviews.some((review: ReviewType) => review.user === currentUser._id)) {
+      alert("You have already reviewed this restaurant.");
+      return;
+    }
     createReview({ restaurantId, rating, comment });
     setRating(0);
     setComment('');
@@ -30,7 +36,18 @@ const Review: React.FC = () => {
 
   return (
     <div>
-      <h2>Reviews</h2>
+      <h2>Thêm đánh giá</h2>
+      <div className="border p-4">
+        <label>Rating</label>
+        <Rating rating={rating} onRatingChange={setRating} />
+        <label>Nhận xét</label>
+        <Textarea value={comment} onChange={(e) => setComment(e.target.value)} />
+        <Button
+          className='mt-4'
+          disabled={rating === 0 || comment.length === 0}
+          onClick={handleCreateReview}
+        >Submit</Button>
+      </div>
       {isReviewsLoading ? (
         <p>Loading reviews...</p>
       ) : (
@@ -43,14 +60,6 @@ const Review: React.FC = () => {
         ))
       )}
 
-      <h2>Add a Review</h2>
-      <div className="border p-4">
-        <label>Rating</label>
-        <Rating rating={rating} onRatingChange={setRating} />
-        <label>Comment</label>
-        <Textarea value={comment} onChange={(e) => setComment(e.target.value)} />
-        <Button onClick={handleCreateReview}>Submit</Button>
-      </div>
     </div>
   );
 };
