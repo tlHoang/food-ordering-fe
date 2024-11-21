@@ -10,9 +10,6 @@ import { useGetMyUser } from '@/api/MyUserApi';
 const Review: React.FC = () => {
   const { restaurantId } = useParams();
   const { currentUser } = useGetMyUser();
-  if (!restaurantId || !currentUser) {
-    return null;
-  }
   const { data: reviews, isLoading: isReviewsLoading } = useGetReviews(restaurantId);
   const { mutate: createReview } = useCreateReview();
   const { mutate: deleteReview } = useDeleteReview();
@@ -20,9 +17,14 @@ const Review: React.FC = () => {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
 
+  if (!restaurantId || !currentUser) {
+    return null;
+  }
+
+
   const handleCreateReview = () => {
     if (reviews.some((review: ReviewType) => review.user === currentUser._id)) {
-      alert("You have already reviewed this restaurant.");
+      alert("Bạn đã đánh giá rồi");
       return;
     }
     createReview({ restaurantId, rating, comment });
@@ -51,15 +53,27 @@ const Review: React.FC = () => {
       {isReviewsLoading ? (
         <p>Loading reviews...</p>
       ) : (
-        reviews.map((review: ReviewType) => (
-          <div key={review._id} className="border p-4 mb-4">
-            <Rating rating={review.rating} onRatingChange={() => { }} />
-            <p>{review.comment}</p>
-            <Button onClick={() => handleDeleteReview(review._id)}>Delete</Button>
-          </div>
-        ))
+        <>
+          {reviews
+            .filter((review: ReviewType) => review.user === currentUser._id)
+            .map((review: ReviewType) => (
+              <div key={review._id} className="border p-4 mb-4">
+                Tôi:
+                <Rating rating={review.rating} onRatingChange={() => { }} />
+                <p>{review.comment}</p>
+                <Button onClick={() => handleDeleteReview(review._id)}>Delete</Button>
+              </div>
+            ))}
+          {reviews
+            .filter((review: ReviewType) => review.user !== currentUser._id)
+            .map((review: ReviewType) => (
+              <div key={review._id} className="border p-4 mb-4">
+                <Rating rating={review.rating} onRatingChange={() => { }} />
+                <p>{review.comment}</p>
+              </div>
+            ))}
+        </>
       )}
-
     </div>
   );
 };

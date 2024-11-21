@@ -29,7 +29,7 @@ const DetailPage = () => {
   const { data: reviews } = useGetReviews(restaurantId);
   const averageRating = reviews?.length
     ? (reviews.reduce((acc: any, review: any) => acc + review.rating, 0) / reviews.length).toFixed(1)
-    : "No ratings yet";
+    : "Chưa có đánh giá";
 
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
     const storedCartItems = sessionStorage.getItem(`cartItems-${restaurantId}`);
