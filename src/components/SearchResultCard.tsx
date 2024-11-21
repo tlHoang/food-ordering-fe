@@ -2,12 +2,19 @@ import { Restaurant } from "@/types";
 import { Link } from "react-router-dom";
 import { AspectRatio } from "./ui/aspect-ratio";
 import { Banknote, Clock, Dot } from "lucide-react";
+import { useGetReviews } from "@/api/ReviewApi";
+import { Star, StarHalf } from "lucide-react";
 
 type Props = {
   restaurant: Restaurant;
 };
 
 const SearchResultCard = ({ restaurant }: Props) => {
+  const restaurantId = restaurant._id;
+  const { data: reviews } = useGetReviews(restaurantId);
+  const averageRating = reviews?.length
+    ? (reviews.reduce((acc: any, review: any) => acc + review.rating, 0) / reviews.length).toFixed(1)
+    : "Chưa có đánh giá";
   return (
     <Link
       to={`/detail/${restaurant._id}`}
@@ -20,9 +27,30 @@ const SearchResultCard = ({ restaurant }: Props) => {
         />
       </AspectRatio>
       <div>
-        <h3 className="text-2xl font-bold tracking-tight mb-2 group-hover:underline">
+        <h3 className="text-2xl font-bold mb-1 tracking-tight group-hover:underline">
           {restaurant.restaurantName}
         </h3>
+        <div className="text-sm flex items-center gap-2">
+          {averageRating}
+          {reviews?.length > 0 && (
+            <div className="flex items-center">
+              {[...Array(5)].map((_, index) => {
+                const ratingValue = index + 1;
+                return (
+                  <span key={index}>
+                    {ratingValue <= Math.floor(Number(averageRating)) ? (
+                      <Star className="h-5 w-5 text-yellow-500" />
+                    ) : ratingValue - 0.5 <= Number(averageRating) ? (
+                      <StarHalf className="h-5 w-5 text-yellow-500" />
+                    ) : (
+                      <Star className="h-5 w-5 text-white" />
+                    )}
+                  </span>
+                );
+              })}
+            </div>
+          )}
+        </div>
         <div id="card-content" className="grid md:grid-cols-2 gap-2">
           <div className="flex flex-row flex-wrap">
             {restaurant.cuisines.map((item, index) => (

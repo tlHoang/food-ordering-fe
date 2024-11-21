@@ -63,3 +63,12 @@ export type RestaurantSearchResponse = {
     pages: number;
   };
 };
+
+export type Review = {
+  _id: string;
+  user: string;
+  restaurant: string;
+  rating: 1 | 2 | 3 | 4 | 5;
+  comment: string;
+  lastUpdated: string;
+};

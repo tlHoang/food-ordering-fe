@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   useCreateMyRestaurant,
   useGetMyRestaurant,
@@ -7,6 +8,27 @@ import {
 import OrderItemCard from "@/components/OrderItemCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ManageRestaurantForm from "@/forms/manage-restaurant-from/ManageRestaurantForm";
+import { Order } from "@/types";
+import SearchBar from "@/components/OrderSearchBar";
+import { removeVietnameseAccents } from "@/lib/utils";
+
+// const SearchBar = ({ onSearch }: { onSearch: (query: string) => void }) => {
+//   const [query, setQuery] = useState("");
+
+//   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     setQuery(e.target.value);
+//     onSearch(e.target.value);
+//   };
+
+//   return (
+//     <input
+//       type="text"
+//       placeholder="Search by customer name"
+//       value={query}
+//       onChange={handleInputChange}
+//     />
+//   );
+// };
 
 const ManageRestaurantPage = () => {
   const { createRestaurant, isLoading: isCreateLoading } =
@@ -16,34 +38,78 @@ const ManageRestaurantPage = () => {
     useUpdateMyRestaurant();
 
   const { orders } = useGetMyRestaurantOrders();
-  // Filter out orders with status "placed"
-  const filteredOrders = orders?.filter(order => order.status !== "placed");
+  const [orderTab, setOrderTab] = useState<Order[] | undefined>(undefined);
+  const [doneOrderTab, setDoneOrderTab] = useState<Order[] | undefined>(undefined);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [activeTab, setActiveTab] = useState("orders");
+
+  useEffect(() => {
+    const filteredOrders = orders?.filter(order =>
+      removeVietnameseAccents(order.deliveryDetails.name)
+        .toLowerCase()
+        .includes(removeVietnameseAccents(searchQuery).toLowerCase())
+    );
+    setOrderTab(filteredOrders?.filter(order => order.status !== "placed" && order.status !== "delivered"));
+    setDoneOrderTab(filteredOrders?.filter(order => order.status === "delivered"));
+  }, [orders, searchQuery]);
+
+  const handleStatusUpdate = (updatedOrder: Order) => {
+    setOrderTab((prevOrders) =>
+      prevOrders
+        ?.filter(order => order._id !== updatedOrder._id && order.status !== "delivered")
+        .concat(updatedOrder.status !== "placed" && updatedOrder.status !== "delivered" ? [updatedOrder] : [])
+    );
+    setDoneOrderTab((prevOrders) =>
+      prevOrders
+        ?.filter(order => order._id !== updatedOrder._id)
+        .concat(updatedOrder.status === "delivered" ? [updatedOrder] : [])
+    );
+  };
 
   const isEditing = !!restaurant;
 
   return (
-    <Tabs defaultValue="orders">
-      <TabsList>
-        <TabsTrigger value="orders">Đơn hàng</TabsTrigger>
-        <TabsTrigger value="manage-restaurant">Nhà hàng</TabsTrigger>
-      </TabsList>
-      <TabsContent
-        value="orders"
-        className="space-y-5 bg-gray-50 p-10 rounded-lg"
-      >
-        <h2 className="text-2xl font-bold">{filteredOrders?.length} đơn hàng</h2>
-        {filteredOrders?.map((order) => (
-          <OrderItemCard order={order} />
-        ))}
-      </TabsContent>
-      <TabsContent value="manage-restaurant">
-        <ManageRestaurantForm
-          restaurant={restaurant}
-          onSave={isEditing ? updateRestaurant : createRestaurant}
-          isLoading={isCreateLoading || isUpdateLoading}
-        />
-      </TabsContent>
-    </Tabs>
+    <div>
+      <Tabs defaultValue="orders" onValueChange={setActiveTab}>
+        <div className="flex items-center justify-between">
+          <TabsList className="my-4">
+            <TabsTrigger value="orders">Đơn hàng</TabsTrigger>
+            <TabsTrigger value="done-orders">Đơn hàng đã hoàn thành</TabsTrigger>
+            <TabsTrigger value="manage-restaurant">Nhà hàng</TabsTrigger>
+          </TabsList>
+          {activeTab !== "manage-restaurant" && <SearchBar onSearch={setSearchQuery} />}
+        </div>
+        <TabsContent
+          value="orders"
+          className="space-y-5 bg-gray-50 p-10 rounded-lg"
+        >
+          <h2 className="text-2xl font-bold">{orderTab?.length} đơn hàng</h2>
+          <div className="grid md:grid-cols-3 gap-2">
+            {orderTab?.map((order) => (
+              <OrderItemCard order={order} onStatusUpdate={handleStatusUpdate} />
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent
+          value="done-orders"
+          className="space-y-5 bg-gray-50 p-10 rounded-lg"
+        >
+          <h2 className="text-2xl font-bold">{doneOrderTab?.length} đơn hàng đã hoàn thành</h2>
+          <div className="grid md:grid-cols-3 gap-2">
+            {doneOrderTab?.map((order) => (
+              <OrderItemCard order={order} onStatusUpdate={handleStatusUpdate} />
+            ))}
+          </div>
+        </TabsContent>
+        <TabsContent value="manage-restaurant">
+          <ManageRestaurantForm
+            restaurant={restaurant}
+            onSave={isEditing ? updateRestaurant : createRestaurant}
+            isLoading={isCreateLoading || isUpdateLoading}
+          />
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 };
 

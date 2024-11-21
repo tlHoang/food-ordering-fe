@@ -16,9 +16,10 @@ import { useEffect, useState } from "react";
 
 type Props = {
   order: Order;
+  onStatusUpdate: (order: Order) => void;
 };
 
-const OrderItemCard = ({ order }: Props) => {
+const OrderItemCard = ({ order, onStatusUpdate }: Props) => {
   const { updateRestaurantStatus, isLoading } = useUpdateMyRestaurantOrder();
   const [status, setStatus] = useState<OrderStatus>(order.status);
 
@@ -32,6 +33,7 @@ const OrderItemCard = ({ order }: Props) => {
       status: newStatus,
     });
     setStatus(newStatus);
+    onStatusUpdate({ ...order, status: newStatus });
   };
 
   const getTime = () => {
@@ -48,7 +50,7 @@ const OrderItemCard = ({ order }: Props) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="grid md:grid-cols-4 gap-4 justify-between mb-3">
+        <CardTitle className="grid gap-4 justify-between mb-3">
           <div>
             Tên khách hàng:
             <span className="ml-2 font-normal">
