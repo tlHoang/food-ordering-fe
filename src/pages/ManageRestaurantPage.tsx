@@ -11,6 +11,7 @@ import ManageRestaurantForm from "@/forms/manage-restaurant-from/ManageRestauran
 import { Order } from "@/types";
 import SearchBar from "@/components/OrderSearchBar";
 import { removeVietnameseAccents } from "@/lib/utils";
+import DashboardPage from "./DashboardPage";
 
 // const SearchBar = ({ onSearch }: { onSearch: (query: string) => void }) => {
 //   const [query, setQuery] = useState("");
@@ -76,8 +77,9 @@ const ManageRestaurantPage = () => {
             <TabsTrigger value="orders">Đơn hàng</TabsTrigger>
             <TabsTrigger value="done-orders">Đơn hàng đã hoàn thành</TabsTrigger>
             <TabsTrigger value="manage-restaurant">Nhà hàng</TabsTrigger>
+            <TabsTrigger value="dashboard">Dashboard</TabsTrigger>
           </TabsList>
-          {activeTab !== "manage-restaurant" && <SearchBar onSearch={setSearchQuery} />}
+          {activeTab !== "manage-restaurant" && activeTab !== "dashboard" && <SearchBar onSearch={setSearchQuery} />}
         </div>
         <TabsContent
           value="orders"
@@ -107,6 +109,9 @@ const ManageRestaurantPage = () => {
             onSave={isEditing ? updateRestaurant : createRestaurant}
             isLoading={isCreateLoading || isUpdateLoading}
           />
+        </TabsContent>
+        <TabsContent value="dashboard">
+          <DashboardPage />
         </TabsContent>
       </Tabs>
     </div>
