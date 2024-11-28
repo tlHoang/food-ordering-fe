@@ -10,6 +10,7 @@ import SearchPage from "./pages/SearchPage";
 import DetailPage from "./pages/DetailPage";
 import OrderStatusPage from "./pages/OrderStatusPage";
 import TestPage from "./pages/TestPage";
+import DashboardPage from "./pages/DashboardPage";
 
 const AppRoutes = () => {
   return (
@@ -69,6 +70,14 @@ const AppRoutes = () => {
           element={
             <Layout>
               <TestPage />
+            </Layout>
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={
+            <Layout>
+              <DashboardPage />
             </Layout>
           }
         />
