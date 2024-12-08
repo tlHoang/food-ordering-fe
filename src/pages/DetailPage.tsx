@@ -1,4 +1,5 @@
 import { useGetRestaurant } from "@/api/RestaurantApi";
+import { useGetRestaurantPromotions } from "@/api/RestaurantApi";
 import MenuItem from "@/components/MenuItem";
 import OrderSummary from "@/components/OrderSummary";
 import RestaurantInfo from "@/components/RestaurantInfo";
@@ -23,6 +24,7 @@ export type CartItem = {
 
 const DetailPage = () => {
   const { restaurantId } = useParams();
+  const { promotions } = useGetRestaurantPromotions(restaurantId);
   const { restaurant, isLoading } = useGetRestaurant(restaurantId);
   const { createCheckoutSession, isLoading: isCheckoutLoading } =
     useCreateCheckoutSession();
@@ -166,6 +168,7 @@ const DetailPage = () => {
               restaurant={restaurant}
               cartItems={cartItems}
               removeFromCart={removeFromCart}
+              promotions={promotions}
             />
             <CardFooter>
               <CheckoutButton

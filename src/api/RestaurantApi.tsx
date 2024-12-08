@@ -1,5 +1,5 @@
 import { SearchState } from "@/pages/SearchPage";
-import { Restaurant, RestaurantSearchResponse } from "@/types";
+import { Restaurant, RestaurantSearchResponse, Promotion } from "@/types";
 import { useQuery } from "react-query";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -61,3 +61,28 @@ export const useSearchRestaurants = (
     isLoading,
   };
 };
+
+export const useGetRestaurantPromotions = (restaurantId?: string) => {
+  const getPromotionsByRestaurantIdRequest = async (): Promise<Promotion[]> => {
+    const response = await fetch(
+      // `https://dut-food-ordering.onrender.com/api/promotion/673d96a2ccef09ead9f21f91`
+      `https://dut-food-ordering.onrender.com/api/promotion/${restaurantId}`
+      );
+      
+      if (!response.ok) {
+        throw new Error("Failed to get promotions");
+      }
+      
+      return response.json();
+    };
+    
+    const { data: promotions, isLoading } = useQuery(
+      ["fetchPromotions", restaurantId],
+      getPromotionsByRestaurantIdRequest,
+      {
+        enabled: !!restaurantId,
+      }
+      );
+      
+      return { promotions, isLoading };
+  };

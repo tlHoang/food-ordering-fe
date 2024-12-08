@@ -27,6 +27,17 @@ export type Restaurant = {
   lastUpdated: string;
 };
 
+export type Promotion = {
+  _id: string; 
+  restaurantId: string; 
+  description: string; 
+  discountPercentage?: number; 
+  startDate: string; 
+  endDate: string;
+  terms: string; 
+  imageUrl?: string; 
+};
+
 export type OrderStatus =
   | "placed"
   | "paid"

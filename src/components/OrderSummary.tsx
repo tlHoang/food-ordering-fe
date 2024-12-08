@@ -1,17 +1,22 @@
 import { CartItem } from "@/pages/DetailPage";
-import { Restaurant } from "@/types";
+import { Restaurant, Promotion } from "@/types";
 import { CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Separator } from "./ui/separator";
 import { Trash } from "lucide-react";
+import { useState } from "react";
 
 type Props = {
   restaurant: Restaurant;
   cartItems: CartItem[];
   removeFromCart: (cartItem: CartItem) => void;
+  promotions: Promotion[];
 };
 
-const OrderSummary = ({ restaurant, cartItems, removeFromCart }: Props) => {
+const OrderSummary = ({ restaurant, cartItems, removeFromCart, promotions }: Props) => {
+
+  const [promotionCode, setPromotionCode] = useState("");
+
   const getTotalCost = () => {
     const total = cartItems.reduce(
       (total, cartItem) => total + cartItem.price * cartItem.quantity,
@@ -21,6 +26,11 @@ const OrderSummary = ({ restaurant, cartItems, removeFromCart }: Props) => {
     const totalWithDelivery = total + restaurant.deliveryPrice;
 
     return totalWithDelivery.toLocaleString();
+  };
+
+  const handleApplyPromotion = () => {
+    // add
+    console.log(`Applying promotion: ${promotionCode}`);
   };
 
   return (
@@ -56,6 +66,23 @@ const OrderSummary = ({ restaurant, cartItems, removeFromCart }: Props) => {
           <span>Cước phí</span>
           <span>{restaurant.deliveryPrice.toLocaleString()} ₫</span>
         </div>
+        <Separator />
+        <Separator />
+        {promotions.map((promo) => (
+        <div className="flex items-center justify-between">
+          <input
+            type="text"
+            value={promo.name}
+            className="border rounded p-2 flex-1 mr-2"
+          />
+          <button
+            onClick={handleApplyPromotion}
+            className="bg-[#ec8677] text-white rounded p-2"
+          >
+            Apply
+          </button>
+        </div>
+        ))}
         <Separator />
       </CardContent>
     </>
