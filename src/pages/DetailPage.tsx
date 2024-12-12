@@ -6,13 +6,15 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Card, CardFooter } from "@/components/ui/card";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { MenuItem as MenuItemType } from "../types";
+import { MenuItem as MenuItemType, Promotion } from "../types";
 import CheckoutButton from "@/components/CheckoutButton";
 import { UserFormData } from "@/forms/user-profile-form/UserProfileForm";
 import { useCreateCheckoutSession } from "@/api/OrderApi";
 import Review from "@/components/Review";
 import { useGetReviews } from "@/api/ReviewApi";
 import { Star, StarHalf } from "lucide-react";
+import { useGetPromotionsByRestaurant } from "@/api/PromotionApi";
+import PromotionModal from "@/components/PromotionModal";
 
 export type CartItem = {
   _id: string;
@@ -27,6 +29,23 @@ const DetailPage = () => {
   const { createCheckoutSession, isLoading: isCheckoutLoading } =
     useCreateCheckoutSession();
   const { data: reviews } = useGetReviews(restaurantId);
+  const { data: promotions } = useGetPromotionsByRestaurant(restaurantId);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPromotion, setSelectedPromotion] = useState<Promotion | null>(null);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const handleSelectPromotion = (promotion: Promotion) => {
+    setSelectedPromotion(promotion);
+    closeModal();
+  };
+
+  const handleCancelPromotion = () => {
+    setSelectedPromotion(null);
+  };
+
   const averageRating = reviews?.length
     ? (reviews.reduce((acc: any, review: any) => acc + review.rating, 0) / reviews.length).toFixed(1)
     : "Chưa có đánh giá";
@@ -105,6 +124,7 @@ const DetailPage = () => {
         country: userFormData.country,
         email: userFormData.email as string,
       },
+      promotionId: selectedPromotion?._id,
     };
 
     const data = await createCheckoutSession(checkoutData);
@@ -160,12 +180,28 @@ const DetailPage = () => {
           ))}
         </div>
 
+        {/* <div className="mt-4">
+          <h2 className="text-xl font-bold">Promotions</h2>
+          {promotions?.map((promotion) => (
+            <div key={promotion._id} className="p-4 border rounded-lg shadow-sm bg-white">
+              <h3 className="text-lg font-semibold">{promotion.name}</h3>
+              <p>{promotion.description}</p>
+              <p>Discount: {promotion.discountType === "flat" ? `${promotion.discountAmount} ₫` : `${promotion.discountAmount}%`}</p>
+              <p>Start Date: {new Date(promotion.dateStart).toLocaleDateString()}</p>
+              <p>End Date: {new Date(promotion.dateEnd).toLocaleDateString()}</p>
+            </div>
+          ))}
+        </div> */}
+
         <div>
           <Card>
             <OrderSummary
               restaurant={restaurant}
               cartItems={cartItems}
               removeFromCart={removeFromCart}
+              selectedPromotion={selectedPromotion}
+              openModal={openModal}
+              cancelPromotion={handleCancelPromotion}
             />
             <CardFooter>
               <CheckoutButton
@@ -177,6 +213,12 @@ const DetailPage = () => {
           </Card>
         </div>
       </div>
+      <PromotionModal
+        promotions={promotions || []}
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onSelectPromotion={handleSelectPromotion}
+      />
     </div>
   );
 };
