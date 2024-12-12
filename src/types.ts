@@ -72,3 +72,29 @@ export type Review = {
   comment: string;
   lastUpdated: string;
 };
+
+export type DiscountType = "percentage" | "flat";
+
+export type PostPromotion = {
+  name: string;
+  discountType: string;
+  discountAmount: number;
+  description: string;
+  dateStart: string;
+  dateEnd: string;
+  numLimit: number;
+  isActive: boolean;
+};
+
+export type Promotion = {
+  _id: string;
+  name: string;
+  discountType: DiscountType;
+  discountAmount: number;
+  description: string;
+  dateStart: string;
+  dateEnd: string;
+  numLimit: number;
+  numUsed: number;
+  isActive: boolean;
+};
